@@ -1,0 +1,12 @@
+%tr
+  %td= user.idecko
+  %td= user.ip
+  %td= user.latitude
+  %td= user.longitude
+  %td= user.city
+  %td= user.state
+  %td= user.isocode
+  %td= user.proxy_type
+  %td= link_to 'Show', user
+  %td= link_to 'Edit', edit_user_path(user)
+  %td= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }

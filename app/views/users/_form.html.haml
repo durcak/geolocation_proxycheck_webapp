@@ -1,0 +1,41 @@
+= simple_form_for @user, html: { class: "form-horizontal", role: "form", multipart: true } do |f|
+  - if @user.errors.any?
+    #errors
+      %h2
+        = pluralize(@user.errors.count, "error")
+        prevented this User from saving
+      %ul
+        - @user.errors.full_messages.each do |msg|
+          %li= msg
+  %form.form-inline
+    .form-group
+      = f.label :id, class: "col-sm-2 control-label"
+      .col-sm-4
+        = f.text_field :idecko, class: "form-control"
+    .form-group
+      = f.label :ip, class: "col-md-2 control-label"
+      .col-sm-4
+        = f.text_field :ip, class: "form-control"
+    .form-group
+      = f.label :latitude, class: "col-md-2 control-label"
+      .col-sm-4
+        = f.text_field :latitude, class: "form-control"
+    .form-group
+      = f.label :longitude, class: "col-md-2 control-label"
+      .col-sm-4
+        = f.text_field :longitude, class: "form-control"
+    .form-group
+      = f.label :city, class: "col-sm-2 control-label"
+      .col-sm-4
+        = f.text_field :city, class: "form-control"
+    .form-group
+      = f.label :state, class: "col-sm-2 control-label"
+      .col-sm-4
+        = f.text_field :state, class: "form-control"
+    .form-group
+      = f.label :isocode, class: "col-sm-2 control-label"
+      .col-sm-4
+        = f.text_field :isocode, class: "form-control"
+    .form-group
+      .col-sm-offset-2.col-sm-4
+        = f.submit class: "btn btn-primary"

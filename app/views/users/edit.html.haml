@@ -1,0 +1,11 @@
+.container
+  .page-header
+    %h1
+      Editing user
+      = link_to users_path, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-list-alt
+        Back
+      = link_to @user, class: 'btn btn-default' do
+        %span.glyphicon.glyphicon-info-sign
+        Show
+  = render 'form', user: @user

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html40">
+  <Worksheet ss:Name="Sheet1">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">ID</Data></Cell>
+        <Cell><Data ss:Type="String">IP</Data></Cell>
+        <Cell><Data ss:Type="String">State</Data></Cell>
+        <Cell><Data ss:Type="String">City</Data></Cell>
+        <Cell><Data ss:Type="String">Latitude</Data></Cell>
+        <Cell><Data ss:Type="String">Longitude</Data></Cell>
+        <Cell><Data ss:Type="String">Proxy_type</Data></Cell>
+      </Row>
+    <% @all_users.each do |user| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= user.idecko %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= user.ip %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= user.state %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= user.city %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= user.latitude %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= user.longitude %></Data></Cell>
+        <Cell><Data ss:Type="String"><%= user.proxy_type %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

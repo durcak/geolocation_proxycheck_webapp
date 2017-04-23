@@ -1,0 +1,95 @@
+<div class="container">
+  <div style='width: 100%;' class="container">
+    <div id="map" style='width: 100%; height: 500px;'></div>
+  </div>
+</div>
+<script type="text/javascript">
+  handler = Gmaps.build('Google');
+  handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+    markers = handler.addMarkers(<%=raw @hash.to_json %>);
+    handler.bounds.extendWith(markers);
+    handler.fitMapToBounds();
+  });
+</script>
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col-md-12 col-lg-12">
+      <h2>Import Users</h2>      <h5>CSV headers format: "id", "ip", "country", "isocode", "city", "latitude", "longitude".</h2>
+      <h5>You can import data with geolocation and display them or only with IP and ID and
+      they will be geolocated automatically. </h5>
+      <%= form_tag import_users_path, multipart: true do %>
+        <span class="btn btn-large btn-warning btn-file">
+            Choose File
+            <%= file_field_tag :file %>
+        </span>
+        <%= submit_tag "Import CSV",{:class => 'btn btn-primary'} %>
+        <%= link_to 'Add one', new_user_path, class: 'btn btn-success active'%>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="container" data-turbolinks="false"> 
+    <div class="row">
+      <center>
+        <h1>Listing users (<%= @users.count %>)</h1>
+        <%= will_paginate @users, renderer: BootstrapPagination::Rails %>
+      </center>
+    </div>
+    <div class='row'>
+        <%= form_tag search_users_path, method: :get, class: 'search' do %>
+        <div class="col-md-6 col-lg-6">
+            <%= search_field_tag :search, params[:search], class: 'form-control search', placeholder: 'Search anything...' %>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <div class="btn-group">
+              <%= button_tag 'Search', name: nil, class: 'btn btn-primary pull-left' do %>
+                <span class="glyphicon glyphicon-search"></span>
+                Search
+              <% end %>
+              <%= link_to 'Clear', users_path, method: :get, class: 'btn btn-success active'%>
+              <%= link_to 'Geolocate', geolocate_users_path, method: :get, data: { confirm: 'Recounting geolocation will rewrite your data, are you sure?' }, class: 'btn btn-primary active pull-left'%>
+              <%= link_to 'Check Proxy', check_proxy_users_path, method: :get, data: { confirm: 'Check all IPs may take a long time, are you sure?' }, class: 'btn btn-primary active pull-left'%>
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Proxy By Type <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <li><%= link_to 'TOR', show_proxy_users_path(type: "TOR") %></li>
+                <li><%= link_to 'VPN', show_proxy_users_path(type: "VPN") %></li>
+                <li><%= link_to 'DCH', show_proxy_users_path(type: "DCH") %></li>
+                <li><%= link_to 'PUB', show_proxy_users_path(type: "PUB") %></li>
+                <li><%= link_to 'WEB', show_proxy_users_path(type: "WEB") %></li>
+              </ul>
+              <div class="col-md-1">
+                <%= link_to delete_all_users_path, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger active pull-left' do %>
+                  <span class="glyphicon glyphicon-trash"></span>
+                  Delete all
+                <% end %> 
+              </div>
+          </div> 
+        </div>  
+      <% end %>  
+    </div>
+
+  <table class="table">
+    <thead>
+        <tr>
+        <th>ID</th>
+        <th>Ip</th>
+        <th>Latitude</th>
+        <th>Longitude</th>
+        <th>City</th>
+        <th>Country</th>
+        <th>Isocode</th>
+        <th>Proxy_type</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @users %>
+    </tbody>
+  </table>
+</div>
+<center> 
+This site or product includes IP2Location LITE data available from <a href="http://lite.ip2location.com">http://lite.ip2location.com</a>.
+</center>

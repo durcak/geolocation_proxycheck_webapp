@@ -1,0 +1,115 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawCountryMap);
+  google.charts.setOnLoadCallback(drawPieChart);
+  google.charts.setOnLoadCallback(drawBarChart);
+  google.charts.setOnLoadCallback(drawProxyChart);
+
+  function drawCountryMap() {
+
+    var data = google.visualization.arrayToDataTable(<%= raw @data %>);
+
+    var options = {
+	    chart: {
+        title: 'World map of all users'
+      },
+      colorAxis: {colors: ['#00853f', 'black', '#e31b23']},
+	    // #colorAxis: {colors: ['#89C16F','#008F15', '#145509', '#e31b23']},
+      backgroundColor: '#81d4fa',
+      datalessRegionColor: '#FFFFFF',
+      defaultColor: '#f5f5f5'
+    };
+
+    var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+    chart.draw(data, options);
+  }
+
+  function drawPieChart() {
+
+  	var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Country');
+    data.addColumn('number', 'Count');
+    data.addRows(<%= raw @data3 %>);
+
+    var options2 = {title:'Top Countries with Number of Users',
+    							pieSliceText: 'label',sliceVisibilityThreshold: 0.01,
+    							pieHole: 0.4};
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+    chart.draw(data, options2);
+  }
+
+  function drawBarChart() {
+
+  	var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Country');
+    data.addColumn('number', 'Number of users');
+    data.addRows(<%= raw @data2 %>);
+
+    var view = new google.visualization.DataView(data);
+    view.setColumns([0, 1,
+                     { calc: "stringify",
+                       sourceColumn: 1,
+                       type: "string",
+                       role: "annotation" }
+                    ]);
+
+    var options1 = {title:'Top 10 Countries with Number of Users',
+        					hAxis: {title: 'Number of users'},
+        					vAxis: {title: 'Country'},
+                  annotations: {alwaysOutside: true}};
+
+
+		var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
+
+		barchart.draw(view, options1);
+  }
+
+  function drawProxyChart() {
+
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Proxy Type');
+    data.addColumn('number', 'Proxy Users');
+    data.addRows(<%= raw @data4 %>);
+
+
+    var view = new google.visualization.DataView(data);
+    view.setColumns([0, 1,
+                     { calc: "stringify",
+                       sourceColumn: 1,
+                       type: "string",
+                       role: "annotation" }
+                    ]);
+
+    var options1 = {title:'Proxy Graph',
+               hAxis: {title: 'Number of users'},
+               vAxis: {title: 'Proxy type'},
+               annotations: {alwaysOutside: true}};
+
+    var my_div = document.getElementById('proxychart_div');
+    var barchart = new google.visualization.BarChart(document.getElementById('proxychart_div'));
+
+    barchart.draw(view, options1);
+  }
+</script>
+
+<% if @data2.present? %>
+	<center>
+		<h1> Map of Countries with Number of Users</h1>
+	</center>
+	<div class="container">
+		<div id="regions_div"></div>
+		<div class="row">
+			<div class="col-md-6 col-lg-6">
+				<div id="piechart_div" style='height: 500px;' ></div>
+			</div>
+			<div class="col-md-6 col-lg-6">
+				<div id="barchart_div" style='height: 500px;' ></div>
+			</div>
+		</div>
+    <div id="proxychart_div" style='height: 500px;' ></div>
+  </div>
+<% end %>
+
+
